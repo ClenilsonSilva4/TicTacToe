@@ -54,11 +54,15 @@ public class Jogo {
         administrarRodadas();
     }
 
-    private void administrarRodadas() throws InterruptedException {
+    private void administrarRodadas() {
         System.out.println("Será Decidido na Sorte o Primeiro a Jogar...");
         double sorteComecar = Math.random();
         System.out.println("E Quem Começa a Jogar é... ");
-        TimeUnit.SECONDS.sleep(1);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if(sorteComecar < 0.5) {
             System.out.println(jogadores[0].getNome());
         } else {
