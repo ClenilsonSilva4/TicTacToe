@@ -7,7 +7,11 @@ public class Tabuleiro {
 
     public Tabuleiro() {
         matrizTabuleiro = new char[3][3];
-        Arrays.fill(matrizTabuleiro, ' ');
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matrizTabuleiro[i][j] = 'X';
+            }
+        }
     }
 
     public void zerarTabuleiro() {
@@ -28,9 +32,9 @@ public class Tabuleiro {
 
         if(cont == 9){
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public boolean verificarCasa(int pos1, int pos2) {
@@ -49,16 +53,26 @@ public class Tabuleiro {
         }
     }
 
-    private void imprimirTabuleiro() {
-        for (int i = 0, pos1 = 0; i < 5; i++) {
-            for (int j = 0, pos2 = 0; j < 5; j++) {
-                if(i % 2 == 0 && j % 2 == 0) {
-                    System.out.println(matrizTabuleiro[pos1][pos2]);
-                } else if (i % 2 == 0 && j % 2 != 0) {
-                    System.out.println('║');
-                } //═
+    public void imprimirTabuleiro() {
+        for (int i = 0, pos1 = 0; i < 7; i++) {
+            for (int j = 0, pos2 = 0; j < 7; j++) {
+                if((i == 0 || i == 6) && (j == 0 || j == 6))cortou {
+                    System.out.print(" ");
+                } else if(i % 2 != 0 && j % 2 != 0) {
+                    System.out.print(matrizTabuleiro[pos1][pos2]);
+                    pos2++;
+                } else if (i % 2 != 0 && j % 2 == 0) {
+                    System.out.print(" ║ ");
+                } else if (i % 2 == 0 && j % 2 != 0){
+                    System.out.print("═");
+                } else {
+                    System.out.print("═╬═");
+                }
             }
-            pos1++;
+            System.out.println("");
+            if(i % 2 != 0) {
+                pos1++;
+            }
         }
     }
 }
