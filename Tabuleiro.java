@@ -49,21 +49,19 @@ public class Tabuleiro {
             matrizTabuleiro[pos1][pos2] = comVez.getTipoCasa();
             imprimirTabuleiro();
         } else {
-            comVez.jogadaErrada();
+            comVez.fezJogadaErrada();
         }
     }
 
     public void imprimirTabuleiro() {
-        for (int i = 0, pos1 = 0; i < 7; i++) {
-            for (int j = 0, pos2 = 0; j < 7; j++) {
-                if((i == 0 || i == 6) && (j == 0 || j == 6))cortou {
-                    System.out.print(" ");
-                } else if(i % 2 != 0 && j % 2 != 0) {
-                    System.out.print(matrizTabuleiro[pos1][pos2]);
+        for (int i = 0, pos1 = 0; i < 5; i++) {
+            for (int j = 0, pos2 = 0; j < 5; j++) {
+                if(i % 2 == 0 && j % 2 == 0) {
+                    System.out.print("" + matrizTabuleiro[pos1][pos2]);
                     pos2++;
-                } else if (i % 2 != 0 && j % 2 == 0) {
+                } else if (i % 2 == 0 && j % 2 != 0) {
                     System.out.print(" ║ ");
-                } else if (i % 2 == 0 && j % 2 != 0){
+                } else if (i % 2 != 0 && j % 2 == 0){
                     System.out.print("═");
                 } else {
                     System.out.print("═╬═");
