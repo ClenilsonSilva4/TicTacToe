@@ -29,17 +29,18 @@ class Jogo {
             do {
                 System.out.print("Insira o Nome do Jogador(a): ");
                 auxNome = this.leitor.nextLine();
+                condicao = false;
                 if(auxNome.length() <= 3) {
                     System.out.println("O Comprimento do Nome do Jogador Precisa Ser Maior que Dois Caracteres");
                     condicao = true;
                 }
             } while(condicao);
-            condicao = false;
 
             if(i == 0) {
                 do {
                     System.out.print("Com Qual Identificador Você Quer Jogar? ");
                     tipoJog = this.leitor.nextLine().charAt(0);
+                    condicao = false;
                     if(tipoJog != 'X' && tipoJog != 'O') {
                         System.out.println("O Identificador Precisa Ser \"X\" ou \"O\"");
                         condicao = true;
@@ -119,15 +120,16 @@ class Jogo {
                 System.out.println("Mesmo Tendo Feito Jogadas Erradas.");
             }
         } else {
-            System.out.println("Não Houve Vencedor! A Partida Terminou em Empate.");
+            System.out.println("Deu Velha! A Partida Terminou em Empate.");
         }
 
         this.tabJogo.zerarTabuleiro();
         System.out.println("Será Iniciada uma Nova Partida");
-        System.out.println("Digite \"Y\" Para Manter os Mesmos Jogadores");
+        System.out.println("Digite \"Y\" Se Quiser Manter os Mesmos Jogadores");
         if(leitor.next().charAt(0) == 'Y') {
             this.administrarRodadas();
         } else {
+            leitor = new Scanner(System.in);
             this.iniciarJogo();
         }
     }
