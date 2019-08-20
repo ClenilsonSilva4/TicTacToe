@@ -3,7 +3,7 @@ package IMD.LP;
 import java.util.Scanner;
 
 class Tabuleiro {
-    private char[][] matrizTabuleiro;// = {{'X', 'X', 'X'}, {'X', 'X', 'X'}, {'X', 'X', 'X'}};
+    private char[][] matrizTabuleiro;
     private Scanner getCasas;
 
     Tabuleiro() {
