@@ -2,7 +2,7 @@ package IMD.LP;
 
 import java.util.Scanner;
 
-class Tabuleiro {
+class Tabuleiro{
     private char[][] matrizTabuleiro;
     private Scanner getCasas;
 

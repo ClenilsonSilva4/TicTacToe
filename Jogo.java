@@ -1,9 +1,11 @@
 package IMD.LP;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-class Jogo {
+class Jogo extends JFrame {
     private Jogador[] jogadores;
     private int vencedor;
     private int rodadas;
@@ -11,76 +13,113 @@ class Jogo {
     private Scanner leitor;
 
     Jogo() {
+        super("Jogo da Velha");
         this.jogadores = new Jogador[2];
         this.vencedor = -1;
         this.rodadas = 0;
         this.leitor = new Scanner(System.in);
         this.tabJogo = new Tabuleiro();
-        System.out.println("Bem-vindos ao Jogo da Velha\n");
         this.iniciarJogo();
     }
 
     private void iniciarJogo() {
-        for (int i = 0; i < this.jogadores.length; i++) {
-            String auxNome;
-            char tipoJog;
-            boolean condicao = false;
+        String[] identifierOptions = {"X", "O"};
+        JComboBox<String> selectIdentifierP1 = new JComboBox<>(identifierOptions);
+        JComboBox<String> selectIdentifierP2 = new JComboBox<>(identifierOptions);
 
-            do {
-                System.out.print("Insira o Nome do Jogador(a): ");
-                auxNome = this.leitor.nextLine();
-                condicao = false;
-                if(auxNome.length() <= 3) {
-                    System.out.println("O Comprimento do Nome do Jogador Precisa Ser Maior que Dois Caracteres");
-                    condicao = true;
-                }
-            } while(condicao);
+        JLabel inicialTitle = new JLabel("Bem-vindos ao Jogo da Velha");
+        inicialTitle.setFont(new Font("TimesRoman", Font.BOLD, 14));
 
-            if(i == 0) {
-                do {
-                    System.out.print("Com Qual Identificador Você Quer Jogar? ");
-                    tipoJog = this.leitor.nextLine().charAt(0);
-                    condicao = false;
-                    if(tipoJog != 'X' && tipoJog != 'O') {
-                        System.out.println("O Identificador Precisa Ser \"X\" ou \"O\"");
-                        condicao = true;
+        JPanel playerOnePanel = new JPanel(new FlowLayout());
+        JTextField nameP1Box = new JTextField(20);
+        JLabel descriptionP1 = new JLabel("Nome do Primeiro Jogador: ");
+
+        descriptionP1.setFont(new Font("TimesRoman", Font.PLAIN + Font.ITALIC, 12));
+        nameP1Box.setToolTipText("Insira o Nome do Primeiro Jogador");
+        selectIdentifierP1.setToolTipText("Escolha o Identificador que o Primeiro Jogador Usará");
+        selectIdentifierP1.setSelectedIndex(-1);
+        selectIdentifierP1.addItemListener(event -> {
+                if (event.getStateChange() == ItemEvent.SELECTED) {
+                    if(selectIdentifierP1.getSelectedItem() == "X") {
+                        selectIdentifierP2.setSelectedIndex(1);
+                    } else {
+                        selectIdentifierP2.setSelectedIndex(0);
                     }
-                } while(condicao);
-            } else if (this.jogadores[0].getTipoCasa() == 'X'){
-                tipoJog = 'O';
-            } else {
-                tipoJog = 'X';
+                }
+        });
+        playerOnePanel.add(descriptionP1);
+        playerOnePanel.add(nameP1Box);
+        playerOnePanel.add(selectIdentifierP1);
+
+
+        JPanel playerTwoPanel = new JPanel(new FlowLayout());
+        JTextField nameP2Box = new JTextField(20);
+        JLabel descriptionP2 = new JLabel("Nome do Segundo Jogador: ");
+
+        descriptionP2.setFont(new Font("TimesRoman", Font.PLAIN + Font.ITALIC, 12));
+        nameP2Box.setToolTipText("Insira o Nome do Segundo Jogador");
+        selectIdentifierP2.setToolTipText("Escolha o Identificador que o Segundo Jogador Usará");
+        selectIdentifierP2.setSelectedIndex(-1);
+        selectIdentifierP2.addItemListener(event -> {
+            if(event.getStateChange() == ItemEvent.SELECTED) {
+                if(selectIdentifierP2.getSelectedItem() == "X") {
+                    selectIdentifierP1.setSelectedIndex(1);
+                } else {
+                    selectIdentifierP1.setSelectedIndex(0);
+                }
             }
+        });
+        playerTwoPanel.add(descriptionP2);
+        playerTwoPanel.add(nameP2Box);
+        playerTwoPanel.add(selectIdentifierP2);
 
-            this.jogadores[i] = new Jogador(auxNome, tipoJog);
-        }
+        JButton startGame = new JButton("Iniciar Jogo");
+        startGame.setFont(new Font("TimesRoman", Font.BOLD, 12));
 
-        this.administrarRodadas();
+        Container initialLayout = getContentPane();
+        initialLayout.setLayout(new FlowLayout());
+        initialLayout.add(inicialTitle);
+        initialLayout.add(playerOnePanel);
+        initialLayout.add(playerTwoPanel);
+        initialLayout.add(startGame);
+
+        setSize(500, 180);
+        setResizable(false);
+        setVisible(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        startGame.addActionListener(actionEvent -> {
+            if(nameP1Box.getText().isEmpty() && nameP2Box.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Os Nomes dos Jogadores Estão Vazios");
+            } else if(nameP1Box.getText().length() < 2) {
+                JOptionPane.showMessageDialog(null, "O Nome Inserido para o Primeiro Jogador é Inválido");
+            } else if(nameP2Box.getText().length() < 2) {
+                JOptionPane.showMessageDialog(null, "O Nome Inserido para o Segundo Jogador é Inválido");
+            } else if(selectIdentifierP1.getSelectedItem() == null || selectIdentifierP2.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(null, "Os Identificadores dos Jogadores não Foram Selecionados");
+            } else {
+                int confirmation = JOptionPane.showConfirmDialog(null, "Tem Certeza que Quer Começar o Jogo?");
+                if(confirmation == JOptionPane.YES_OPTION) {
+                    jogadores[0] = new Jogador(nameP1Box.getText(), selectIdentifierP1.getSelectedItem().toString().charAt(0));
+                    jogadores[1] = new Jogador(nameP2Box.getText(), selectIdentifierP2.getSelectedItem().toString().charAt(0));
+                    getContentPane().removeAll();
+                    this.administrarRodadas();
+                }
+            }
+        });
     }
 
     private void administrarRodadas() {
         boolean temGanhador = true;
-
-        System.out.println("Será Decidido na Sorte o Primeiro a Jogar!");
+        JOptionPane.showMessageDialog(null, "Será Decidido na Sorte o Primeiro a Jogar!\nE Quem Começa a Jogar é...");
         double sorteComecar = Math.random();
-        System.out.print("E Quem Começa a Jogar é... ");
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         if(sorteComecar < 0.5) {
-            System.out.println(this.jogadores[0].getNome());
+            JOptionPane.showMessageDialog(null, this.jogadores[0].getNome());
             this.jogadores[0].setTemVez(true);
         } else {
-            System.out.println(this.jogadores[1].getNome());
+            JOptionPane.showMessageDialog(null, this.jogadores[1].getNome());
             this.jogadores[1].setTemVez(true);
-        }
-
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         this.tabJogo.imprimirTabuleiro();
 
