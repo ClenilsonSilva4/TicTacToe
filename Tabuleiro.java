@@ -1,13 +1,9 @@
 package IMD.LP;
 
-import java.util.Scanner;
-
-class Tabuleiro{
+public class Tabuleiro{
     private char[][] matrizTabuleiro;
-    private Scanner getCasas;
 
-    Tabuleiro() {
-        this.getCasas = new Scanner(System.in);
+    public Tabuleiro() {
         this.matrizTabuleiro = new char[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -16,7 +12,7 @@ class Tabuleiro{
         }
     }
 
-    void zerarTabuleiro() {
+    public void zerarTabuleiro() {
         this.matrizTabuleiro = new char[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -25,16 +21,25 @@ class Tabuleiro{
         }
     }
 
-    char tabuleiroCompleto() {
-        int checkDiagX = 0, checkDiagO = 0, checkHorX = 0, checkHorO = 0, checkVerX = 0, checkVerO = 0, cont = 0;
+    public char tabuleiroCompleto() {
+        int checkDiagPriX = 0, checkDiagPriO = 0, checkHorX = 0, checkHorO = 0, checkVerX = 0, checkVerO = 0, cont = 0,
+            checkDiagSecX = 0, checkDiagSecO = 0;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if(i == j){
                     if(this.matrizTabuleiro[i][j] == 'X'){
-                        checkDiagX++;
+                        checkDiagPriX++;
                     } else if(this.matrizTabuleiro[i][j] == 'O') {
-                        checkDiagO++;
+                        checkDiagPriO++;
+                    }
+                }
+
+                if(i == 0 && j == 2 || i == 2 && j == 0 || i == 1 && j == 1){
+                    if(this.matrizTabuleiro[i][j] == 'X'){
+                        checkDiagSecX++;
+                    } else if(this.matrizTabuleiro[i][j] == 'O') {
+                        checkDiagSecO++;
                     }
                 }
 
@@ -60,9 +65,9 @@ class Tabuleiro{
             }
             checkHorO = checkVerO = checkVerX = checkHorX = 0;
         }
-        if(checkDiagO == 3) {
+        if(checkDiagPriO == 3 || checkDiagSecO == 3) {
             return 'O';
-        } else if(checkDiagX == 3) {
+        } else if(checkDiagPriX == 3 || checkDiagSecX == 3) {
             return 'X';
         } else if(cont == 9) {
             return 'D';
@@ -74,17 +79,7 @@ class Tabuleiro{
         return this.matrizTabuleiro[pos1][pos2] == ' ';
     }
 
-    void preencherTabuleiro(Jogador comVez) {
-        int pos1, pos2;
-
-        System.out.println("\nA Vez é do(a) Jogador(a) " + comVez.getNome() +
-                           " Com o Identificador \"" + comVez.getTipoCasa() + "\"");
-
-        System.out.println("Insira a Primeira Coordenada da Sua Jogada.");
-        pos2 = getCasas.nextInt() - 1;
-        System.out.println("Insira a Primeira Coordenada da Sua Jogada.");
-        pos1 = getCasas.nextInt() - 1;
-
+    public void preencherTabuleiro(Jogador comVez, int pos1, int pos2) {
         if(pos1 >= 0 && pos1 <= 2 && pos2 >= 0 && pos2 <= 2) {
             if(this.verificarCasa(pos1, pos2)) {
                 this.matrizTabuleiro[pos1][pos2] = comVez.getTipoCasa();
@@ -97,32 +92,5 @@ class Tabuleiro{
             System.out.println("As Coordenadas Não Estão Corretas! A Vez Será Passada.");
         }
         comVez.setTemVez(false);
-    }
-
-    void imprimirTabuleiro() {
-        System.out.print(" 1   2   3\n");
-        int coord = 1;
-        for (int i = 0, pos1 = 0; i < 5; i++) {
-            for (int j = 0, pos2 = 0; j < 5; j++) {
-                if(i % 2 == 0 && j % 2 == 0) {
-                    System.out.print(" " + this.matrizTabuleiro[pos1][pos2]);
-                    pos2++;
-                } else if (i % 2 == 0) {
-                    System.out.print(" ║");
-                } else if (j % 2 == 0){
-                    System.out.print("═══");
-                } else {
-                    System.out.print("╬");
-                }
-            }
-            if(i % 2 == 0) {
-                System.out.print("  " + coord);
-                coord++;
-            }
-            if(i % 2 != 0) {
-                pos1++;
-            }
-            System.out.print("\n");
-        }
     }
 }

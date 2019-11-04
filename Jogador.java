@@ -1,39 +1,39 @@
 package IMD.LP;
 
-class Jogador {
+public class Jogador {
     private String nome;
     private char tipoCasa;
     private boolean casaErrada;
     private boolean temVez;
 
-    Jogador(String nomeJog, char tipoJog) {
+    public Jogador(String nomeJog, char tipoJog) {
         this.nome = nomeJog;
         this.tipoCasa = tipoJog;
         this.casaErrada = false;
         this.temVez = false;
     }
 
-    char getTipoCasa() {
-        return this.tipoCasa;
+    public String getNome() {
+        return nome;
     }
 
-    void fezJogadaErrada() {
+    public char getTipoCasa() {
+        return tipoCasa;
+    }
+
+    public void setTemVez(boolean temVez) {
+        this.temVez = temVez;
+    }
+
+    public boolean getJogadaErrada() {
+        return casaErrada;
+    }
+
+    public void fezJogadaErrada() {
         this.casaErrada = true;
     }
 
-    void setTemVez(boolean cond) {
-        this.temVez = cond;
-    }
-
-    boolean getTemVez() {
-        return this.temVez;
-    }
-
-    boolean getJogadaErrada(){
-        return this.casaErrada;
-    }
-
-    String getNome() {
-        return this.nome;
+    public boolean getTemVez() {
+        return temVez;
     }
 }
